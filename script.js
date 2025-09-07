@@ -1,90 +1,64 @@
 
 const questions = [
     {
-        question: "Which is the largest animal in the world?",
+        question: "Was ist die Hauptstadt von Deutschland?",
         answers: [
-            { text: "Shark", correct: false },
-            { text: "Blue whale", correct: true },
+            { img: "https://i.natgeofe.com/n/b234ec7d-a988-4b75-9e65-749ddcbea7a0/citylife_berlin_2B4H3T1_web.jpg", correct: true },
+            { img: "https://static01.nyt.com/images/2025/05/10/travel/01thing-to-do-berlin-top-bmwg/01thing-to-do-berlin-top-bmwg-videoSixteenByNine3000.jpg", correct: false }
         ]
     },
     {
-        question: "Which is the largest desert in the world?",
+        question: "Was ist 2 + 2?",
         answers: [
-            { text: "Kalahari", correct: true },
-            { text: "Gobi", correct: false },
-        ]
-    },
-    {
-        question: "Which is the smallest country  in the world?",
-        answers: [
-            { text: "Vatican City", correct: true },
-            { text: "Bhutan", correct: false }
-        ]
-    },
-    {
-        question: "Which is the smallest continent in the world?",
-        answers: [
-            { text: "Asia", correct: false },
-            { text: "Australia", correct: true }
+            { img: "https://example.com/3.jpg", correct: false },
+            { img: "https://example.com/4.jpg", correct: true }
         ]
     }
 ];
 
-const questionElement = document.getElementById("question");
-const answerButton = document.getElementById("answer-buttons");
-const nextButton = document.getElementById("next-btn");
+let currentQuestionIndex = 0;
 
-let currentQuestionsIndex = 0;
-let score = 0;
-
-function startQuiz()  {
-    currentQuestionsIndex = 0;
-    score = 0;
-    nextButton.innerHTML = 'Next';
-    showQuestion();
+function startQuiz() {
+    currentQuestionIndex = 0;
+    showQuestion(questions[currentQuestionIndex]);
 }
 
-function showQuestion() {
-    resetState();
-    let currentQuestion = questions[currentQuestionsIndex];
-    let questionNo = currentQuestionsIndex + 1;
-    questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
-
-    currentQuestion.answers.forEach(answer => {
-        const button = document.createElement("button");
-        button.innerHTML = answer.text;
-        button.classList.add("btn"); // Corrected class name
-        answerButton.appendChild(button);
-        if (answer.correct) {
-            button.dataset.correct = answer.correct
-        }
-        button.addEventListener("click", selectAnswer)
+function showQuestion(question) {
+    const questionElement = document.getElementById('question');
+    questionElement.innerText = question.question;
+    const answerButtons = document.getElementById('answer-buttons');
+    answerButtons.innerHTML = '';
+    question.answers.forEach(answer => {
+        const button = document.createElement('button');
+        const img = document.createElement('img');
+        img.src = answer.img;
+        img.alt = "Antwortbild";
+        img.style.width = "100%"; // Bildgröße anpassen
+        button.classList.add('btn');
+        button.onclick = () => checkAnswer(button, answer.correct);
+        button.appendChild(img);
+        answerButtons.appendChild(button);
     });
 }
 
-function resetState() {
-    nextButton.style.display = 'none'
-    while(answerButton.firstChild){
-        answerButton.removeChild(answerButton.firstChild);
-    }
-}
-
-function selectAnswer(e) {
-    const selectedBtn = e.target
-    const isCorrect = selectedBtn.dataset.correct === "true";
+function checkAnswer(button, isCorrect) {
     if (isCorrect) {
-        selectedBtn.classList.add("correct");
-        score++;
+        button.classList.add('correct');
     } else {
-        selectedBtn.classList.add("incorrect"); 
+        button.classList.add('wrong');
     }
-    Array.from(answerButton.children).forEach(button => {
-        if (button.dataset.correct === "true") {
-            button.classList.add("correct");
-        }
-        button.disabled = true;
+    Array.from(document.querySelectorAll('.btn')).forEach(btn => {
+        btn.disabled = true; // Deaktiviert alle Buttons nach der Auswahl
     });
-    nextButton.style.display = "block";
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+        showQuestion(questions[currentQuestionIndex]);
+    } else {
+        alert("Quiz beendet!");
+    }
 }
 
 function showScore() {
@@ -93,23 +67,5 @@ function showScore() {
     nextButton.innerHTML = 'Play Again'
     nextButton.style.display = "block";
 }
-
-function handleNextButton() {
-    currentQuestionsIndex++;
-    if (currentQuestionsIndex < questions.length) {
-        showQuestion();
-
-    } else {
-        showScore();
-    }
-}
-
-nextButton.addEventListener("click", () => {
-    if (currentQuestionsIndex < questions.length) {
-        handleNextButton();
-    } else {
-        startQuiz();
-    }
-})
 
 startQuiz();

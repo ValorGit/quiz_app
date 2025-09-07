@@ -1,4 +1,4 @@
-*  {
+/* *  {
     margin: 0;
     padding: 0;
     font-family: 'poppins', 'sans-serrif';
@@ -6,7 +6,7 @@
 }
 
 body  {
-    background: #001e4d;
+    background: #c4deb7;
 }
 
 .app  {
@@ -82,4 +82,39 @@ body  {
 .incorrect {
     background: #ff9393;
 
+} */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.app {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+    display: block;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 30%;
+    height: 20%;
+}
+
+.correct {
+    border: 5px solid green;
+}
+
+.wrong {
+    border: 5px solid red;
 }
